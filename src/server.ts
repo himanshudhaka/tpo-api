@@ -1,13 +1,19 @@
-// import prisma from './db'
-import express from 'express'
-import companiesRoute from './routes/companiesRoute'
-const app = express()
-// const router = express.Router()
+import express from "express";
+import cors from "cors";
+import companyController from "./controllers/company.controller";
+import jobsController from "./controllers/jobs.controller";
+import collegeController from "./controllers/college.controller";
+import studentController from "./controllers/student.controller";
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
-app.use('/companies',companiesRoute);
+app.use("/companies", companyController);
+app.use("/jobs", jobsController);
+app.use("/colleges", collegeController);
+app.use("/student", studentController);
 
 app.listen(3000, () => {
-    console.log(`Example app listening on port`)
-  })
+  console.log(`Example app listening on port`);
+});

@@ -10,11 +10,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Companies{
+model Company {
   id Int @id @default(autoincrement())
-  name String 
+  name String
   email String @unique
   password String
   phone String @unique
+  jobs Job[]
   createdAt DateTime @default(now()) 
+  updatedAt DateTime? @updatedAt
+}
+
+model College {
+  id Int @id @default(autoincrement())
+  email String
+  password String
+  name String
+  city String
+  state String
+  pincode String
+  aicte_id String
+  students Student[]
+  jobs Job[]
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime? @updatedAt
+}
+
+model Student {
+  id Int @id @default(autoincrement())
+  rollNo String @unique
+  email String @unique
+  password String
+  firstName String
+  lastName String
+  academics String
+  branch String
+  approved Boolean
+  college College @relation(fields: [collegeId], references: [id])
+  collegeId Int
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime? @updatedAt
+}
+
+model Job {
+  id Int @id @default(autoincrement())
+  post String 
+  description String
+  salary String?
+  criteria String
+  process String?
+  company Company @relation(fields: [companyId], references: [id])
+  companyId Int
+  college College @relation(fields: [collegeId],references: [id])
+  collegeId Int
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime? @updatedAt
 }
