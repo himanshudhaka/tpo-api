@@ -21,6 +21,7 @@ export async function create(student: Student) {
       branch: student.branch,
       approved: student.approved,
       collegeId: Number(student.collegeId),
+      phone: student.phone,
     },
   });
 }
@@ -38,6 +39,7 @@ export async function update(student: Student, id: number) {
       branch: student.branch,
       approved: student.approved,
       collegeId: Number(student.collegeId),
+      phone: student.phone,
     },
   });
 }

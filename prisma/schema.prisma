@@ -23,13 +23,14 @@ model Company {
 
 model College {
   id Int @id @default(autoincrement())
-  email String
+  email String @unique
   password String
   name String
+  phone String @unique
   city String
   state String
   pincode String
-  aicte_id String
+  aicte_id String @unique
   students Student[]
   jobs Job[]
   createdAt DateTime @default(now()) 
@@ -41,11 +42,12 @@ model Student {
   rollNo String @unique
   email String @unique
   password String
+  phone String @unique
   firstName String
   lastName String
   academics String
   branch String
-  approved Boolean
+  approved Boolean @default(false)
   college College @relation(fields: [collegeId], references: [id])
   collegeId Int
   createdAt DateTime @default(now()) 
@@ -57,7 +59,7 @@ model Job {
   post String 
   description String
   salary String?
-  criteria String
+  criteria String?
   process String?
   company Company @relation(fields: [companyId], references: [id])
   companyId Int
