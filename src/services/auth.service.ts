@@ -1,23 +1,8 @@
-// import { College, Company, Student } from "@prisma/client";
-import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import * as dotenv from "dotenv";
 dotenv.config();
 import prisma from "../db";
 import jwt from "jsonwebtoken";
-// import SECRET from "dotenv";
-// import { Student } from "@prisma/client";
-
-// export async function authenticate({ email   , password}){
-//     const user =
-// }
-
-// export async function authenticateCollege({email , password}) {
-//     // const user = await prisma.college.findUnique({
-//     //     where :{
-//     //         email  : email,
-//     //         password : password
-//     //     }
-//     // })
-// }
+import bcrypt from "bcryptjs";
 
 export async function authenticate(
   type: string,
@@ -34,7 +19,9 @@ export async function authenticate(
 
   if (!user) throw "User is not registered";
 
-  if (password == user.password) {
+  const checkPassword = await bcrypt.compare(password, user.password);
+
+  if (checkPassword) {
     const token = jwt.sign({ sub: user.id }, process.env.SECRET ?? "", {
       expiresIn: "7d",
     });
@@ -44,6 +31,24 @@ export async function authenticate(
     };
   }
 }
+
+// async function signup(type: string, used: any) {
+//   let user;
+//   if (type === "company") {
+//     user = companyService.create(used);
+//   } else if (type === "college") {
+//     user = collegeService.create(used);
+//   } else {
+//     user = studentService.create(used);
+//   }
+//   const token = jwt.sign({ sub: user.id }, process.env.SECRET ?? "", {
+//     expiresIn: "7d",
+//   });
+//   return {
+//     ...omitPassword(user),
+//     token,
+//   };
+// }
 
 function omitPassword(user: any) {
   const { password, ...userWithoutPassword } = user;

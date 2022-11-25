@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
-import * as jobService from "../services/jobs.service";
+import * as jobService from "../services/job.service";
 
 router.get("/", get);
 router.get("/:id", getById);
