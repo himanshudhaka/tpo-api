@@ -16,6 +16,9 @@ model Company {
   email String @unique
   password String
   phone String? @unique
+  address String?
+  city String?
+  state String?
   jobs Job[]
   createdAt DateTime @default(now()) 
   updatedAt DateTime? @updatedAt
@@ -27,12 +30,14 @@ model College {
   password String
   name String?
   phone String? @unique 
+  address String?
   city String?
   state String?
   pincode String?
   aicte_id String? @unique
   students Student[]
   jobs Job[]
+  applieds Applied[]
   createdAt DateTime @default(now()) 
   updatedAt DateTime? @updatedAt
 }
@@ -45,11 +50,14 @@ model Student {
   phone String? @unique
   firstName String?
   lastName String?
-  academics String?
+  clgAcademics String?
+  twelveGrade String?
+  tenthGrade String?
   branch String?
-  approved Boolean @default(false)
-  college College @relation(fields: [collegeId], references: [id])
-  collegeId Int
+  approved Boolean? @default(false)
+  college College? @relation(fields: [collegeId], references: [id])
+  collegeId Int?
+  applieds Applied[]
   createdAt DateTime @default(now()) 
   updatedAt DateTime? @updatedAt
 }
@@ -58,13 +66,33 @@ model Job {
   id Int @id @default(autoincrement())
   post String 
   description String
-  salary String?
-  criteria String?
+  salary String
+  grade String?
+  twelthGrade String?
+  tenthGrade String?
   process String?
   company Company @relation(fields: [companyId], references: [id])
   companyId Int
   college College @relation(fields: [collegeId],references: [id])
   collegeId Int
+  applicants Applied[]
   createdAt DateTime @default(now()) 
   updatedAt DateTime? @updatedAt
+}
+
+model Applied{
+  id Int @id @default(autoincrement())
+  student Student @relation(fields: [studentId],references: [id])
+  studentId Int
+  college College @relation(fields: [collegeId],references: [id])
+  collegeId Int
+  job Job @relation(fields: [jobId],references: [id])
+  jobId Int
+  status STATUS @default(REVIEW)
+}
+
+enum STATUS {
+  ACCEPTED
+  REJECTED
+  REVIEW
 }

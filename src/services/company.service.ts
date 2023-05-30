@@ -11,7 +11,30 @@ export async function get() {
 }
 
 export async function getById(id: number) {
-  return await prisma.company.findUnique({ where: { id } });
+  return await prisma.company.findUnique({
+    where: { id },
+    include: {
+      jobs: true,
+    },
+  });
+}
+
+export async function _getApplicants(id: number) {
+  return await prisma.applied.findMany({
+    where: { jobId: id },
+    include: {
+      student: true,
+    },
+  });
+}
+
+export async function _setStatus(id: number, body: any) {
+  return await prisma.applied.update({
+    where: { id },
+    data: {
+      status: body.status,
+    },
+  });
 }
 
 export async function create(company: Company) {
@@ -33,4 +56,13 @@ export async function update(company: Company, id: number) {
 
 export async function _delete(id: number) {
   return await prisma.company.delete({ where: { id } });
+}
+
+export async function getJobs(id: number) {
+  return await prisma.job.findMany({
+    where: { companyId: id },
+    include: {
+      college: true,
+    },
+  });
 }

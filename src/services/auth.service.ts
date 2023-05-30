@@ -9,7 +9,6 @@ export async function authenticate(
   email: string,
   password: string
 ) {
-  type = "company";
   let user;
   if (type === "company")
     user = await prisma.company.findUnique({ where: { email } });
@@ -28,14 +27,16 @@ export async function authenticate(
     return {
       ...omitPassword(user),
       token,
+      type,
     };
   }
+  throw "Password is not correct";
 }
 
 // async function signup(type: string, used: any) {
 //   let user;
 //   if (type === "company") {
-//     user = companyService.create(used);
+//     user = .create(used);
 //   } else if (type === "college") {
 //     user = collegeService.create(used);
 //   } else {

@@ -18,7 +18,7 @@ app.use("/colleges", collegeController);
 app.use("/student", studentController);
 // app.use(jwt());
 app.use("/", authController);
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.listen(3000, () => {
   console.log(`Example app listening on port`);

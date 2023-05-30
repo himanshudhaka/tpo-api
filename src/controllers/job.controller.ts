@@ -7,6 +7,7 @@ router.get("/:id", getById);
 router.post("/", create);
 router.put("/:id", update);
 router.delete("/:id", _delete);
+router.post("/apply", applicants);
 
 function get(req: Request, res: Response, next: NextFunction) {
   jobService
@@ -40,6 +41,15 @@ function _delete(req: Request, res: Response, next: NextFunction) {
   jobService
     ._delete(Number(req.params.id))
     .then((job) => res.json(job))
+    .catch(next);
+}
+
+function applicants(req: Request, res: Response, next: NextFunction) {
+  jobService
+    ._applicants(req.body)
+    .then((applicant) => {
+      res.json(applicant);
+    })
     .catch(next);
 }
 

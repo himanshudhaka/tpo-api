@@ -1,6 +1,6 @@
 import prisma from "../db";
 import { Job } from "@prisma/client";
-
+import { Applied } from "@prisma/client";
 export async function get() {
   return await prisma.job.findMany({
     include: {
@@ -23,7 +23,10 @@ export async function create(Job: Job) {
       post: Job.post,
       description: Job.description,
       salary: Job.salary,
-      criteria: Job.criteria,
+      grade: Job.grade,
+      twelthGrade: Job.twelthGrade,
+      tenthGrade: Job.tenthGrade,
+      process: Job.process,
       companyId: Number(Job.companyId),
       collegeId: Number(Job.collegeId),
     },
@@ -39,4 +42,10 @@ export async function update(job: Job, id: number) {
 
 export async function _delete(id: number) {
   return await prisma.job.delete({ where: { id } });
+}
+
+export async function _applicants(applicant: Applied) {
+  return await prisma.applied.create({
+    data: applicant,
+  });
 }

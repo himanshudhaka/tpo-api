@@ -11,52 +11,52 @@ router.post("/login", authenticate);
 router.post("/signup", signUp);
 
 function authenticate(req: Request, res: Response, next: NextFunction) {
-  const { email, password } = req.body;
+  const { email, password, type } = req.body;
   authService
-    .authenticate("company", email, password)
+    .authenticate(type, email, password)
     .then((user) => res.json(user))
     .catch(next);
 }
 
 function signUp(req: Request, res: Response, next: NextFunction) {
-  let type = "company";
-  if (type === "company") {
+  if (req.query.type === "company") {
     companyService
       .create(req.body)
       .then((user) => {
         const token = jwt.sign({ sub: user.id }, process.env.SECRET ?? "", {
           expiresIn: "7d",
         });
-        return {
+
+        res.json({
           ...omitPassword(user),
           token,
-        };
+        });
       })
       .catch(next);
-  } else if (type === "college") {
+  } else if (req.query.type === "college") {
     collegeService
       .create(req.body)
       .then((user) => {
         const token = jwt.sign({ sub: user.id }, process.env.SECRET ?? "", {
           expiresIn: "7d",
         });
-        return {
+        res.json({
           ...omitPassword(user),
           token,
-        };
+        });
       })
       .catch(next);
-  } else {
+  } else if (req.query.type === "student") {
     studentService
       .create(req.body)
       .then((user) => {
         const token = jwt.sign({ sub: user.id }, process.env.SECRET ?? "", {
           expiresIn: "7d",
         });
-        return {
+        res.json({
           ...omitPassword(user),
           token,
-        };
+        });
       })
       .catch(next);
   }
